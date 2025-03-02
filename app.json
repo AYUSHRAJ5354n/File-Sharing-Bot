@@ -33,8 +33,8 @@
       },
       "FORCE_SUB_CHANNEL": {
         "description": "id of the channel or group, if you want enable force sub feature else put 0",
-        "value": "1",
-        "required": True
+        "value": "0",
+        "required": False
       },
       "DB_URL": {
           "description": "Your Mongo DB Database URL",
