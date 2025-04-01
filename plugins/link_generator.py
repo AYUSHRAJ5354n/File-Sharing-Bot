@@ -2,9 +2,16 @@ from pyrogram import Client, filters
 from pyrogram.types import Message, InlineKeyboardMarkup, InlineKeyboardButton
 from bot import Bot
 from config import ADMINS
+from helper_func import is_user_verified
 from helper_func import encode, get_message_id
 
-
+@Bot.on_message(filters.command('getfile') & filters.private)
+async def get_file(client: Client, message: Message):
+    user_id = message.from_user.id
+    if not await is_user_verified(user_id):
+        await message.reply("Please verify yourself through the shortener link.")
+        return
+    # Existing logic to provide file access
 
 @Bot.on_message(filters.private & filters.user(ADMINS) & filters.command('batch'))
 async def batch(client: Client, message: Message):
