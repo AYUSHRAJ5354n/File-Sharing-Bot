@@ -18,8 +18,8 @@ DB_NAME = os.environ.get("DB_NAME", "madflixbotz")
 CHANNEL_ID = int(os.environ.get("CHANNEL_ID", "-1001885548690"))
 FORCE_SUB_CHANNEL = int(os.environ.get("FORCE_SUB_CHANNEL", "0"))
 
-SHORTENER_API_URL = os.environ.get("SHORTENER_API_URL", "your_shortener_api_url")
-SHORTENER_API_KEY = os.environ.get("SHORTENER_API_KEY", "your_shortener_api_key")
+SHORTENER_API_URL = os.environ.get("SHORTENER_API_URL", "indiaearnx.com")
+SHORTENER_API_KEY = os.environ.get("SHORTENER_API_KEY", "2cdf86a563e030ad9027f13f7ac157f8ccca79a1")
 
 FILE_AUTO_DELETE = int(os.getenv("FILE_AUTO_DELETE", "600")) # auto delete in seconds
 
