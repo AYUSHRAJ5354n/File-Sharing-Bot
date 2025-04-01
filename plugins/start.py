@@ -6,15 +6,34 @@ from pyrogram.errors import FloodWait, UserIsBlocked, InputUserDeactivated
 from bot import Bot
 from config import ADMINS, FORCE_MSG, START_MSG, CUSTOM_CAPTION, DISABLE_CHANNEL_BUTTON, PROTECT_CONTENT, FILE_AUTO_DELETE
 from helper_func import subscribed, encode, decode, get_messages
+from datetime import datetime, timedelta
+from pyrogram import filters
 from database.database import add_user, del_user, full_userbase, present_user
+
+premium_users_db = {}
+
+@Bot.on_message(filters.command('puser') & filters.user(ADMINS))
+async def add_premium_user(client: Client, message: Message):
+    try:
+        parts = message.text.split()
+        user_id = int(parts[1])
+        days = int(parts[2])
+        expiry_date = datetime.now() + timedelta(days=days)
+        premium_users_db[user_id] = expiry_date
+        await message.reply(f"User {user_id} has been added as a premium user for {days} days.")
+    except (IndexError, ValueError):
+        await message.reply("Usage: /puser <user_id> <days>")
+
+async def is_premium_user(user_id):
+    if user_id in premium_users_db:
+        expiry_date = premium_users_db[user_id]
+        if datetime.now() < expiry_date:
+            return True
+    return False
 
 madflixofficials = FILE_AUTO_DELETE
 jishudeveloper = madflixofficials
 file_auto_delete = humanize.naturaldelta(jishudeveloper)
-
-
-
-
 
 @Bot.on_message(filters.command('start') & filters.private & subscribed)
 async def start_command(client: Client, message: Message):
