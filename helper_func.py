@@ -1,13 +1,13 @@
 import base64
 import re
 import asyncio
+import requests
 from pyrogram import filters
 from pyrogram.enums import ChatMemberStatus
 from config import FORCE_SUB_CHANNEL, ADMINS
 from pyrogram.errors.exceptions.bad_request_400 import UserNotParticipant
 from pyrogram.errors import FloodWait
-
-
+from datetime import datetime, timedelta
 
 
 async def is_subscribed(filter, client, update):
@@ -26,6 +26,28 @@ async def is_subscribed(filter, client, update):
     else:
         return True 
 
+verification_db = {}
+
+async def verify_user_via_shortener(user_id):
+    url = f"{SHORTENER_API_URL}/verify"
+    params = {"api_key": SHORTENER_API_KEY, "user_id": user_id}
+    response = requests.get(url, params=params)
+    if response.status_code == 200 and response.json().get("verified"):
+        verification_db[user_id] = {
+            'verified': True,
+            'timestamp': datetime.now()
+        }
+        return True
+    return False
+
+async def is_user_verified(user_id):
+    if user_id in verification_db:
+        verification_info = verification_db[user_id]
+        if verification_info['verified']:
+            time_diff = datetime.now() - verification_info['timestamp']
+            if time_diff < timedelta(hours=24):
+                return True
+    return False
 
 async def encode(string):
     string_bytes = string.encode("ascii")
