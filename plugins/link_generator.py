@@ -2,8 +2,19 @@ from pyrogram import Client, filters
 from pyrogram.types import Message, InlineKeyboardMarkup, InlineKeyboardButton
 from bot import Bot
 from config import ADMINS
+from plugins.start import is_premium_user
 from helper_func import is_user_verified
 from helper_func import encode, get_message_id
+from helper_func import is_user_verified
+
+
+@Bot.on_message(filters.command('getfile') & filters.private)
+async def get_file(client: Client, message: Message):
+    user_id = message.from_user.id
+    if not await is_premium_user(user_id) and not await is_user_verified(user_id):
+        await message.reply("Please verify yourself through the shortener link or contact an admin for premium access.")
+        return
+    # Existing logic to provide file access
 
 @Bot.on_message(filters.command('getfile') & filters.private)
 async def get_file(client: Client, message: Message):
